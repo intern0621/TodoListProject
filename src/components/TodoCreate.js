@@ -1,7 +1,13 @@
+/* 새로운 일을 등록할 수 있게 해 주는 컴포넌트 
+   react-icons에 있는 MdAdd 사용 => + 아이콘
+   useState 사용 => 토글 가능한 open 값 생성  */
+
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
 
+/* z-index : 아이콘들이 겹쳐 있을 때 제일 먼저 올 우선순위 결정 
+   */
 const CircleButton = styled.button`
   background: #38d9a9;
   &:hover {
@@ -24,17 +30,16 @@ const CircleButton = styled.button`
   bottom: 0px;
   transform: translate(-50%, 50%);
   color: white;
-  border-radius: 50%;
   border: none;
-  outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
-
+  border-radius: 50%;
   transition: 0.125s all ease-in;
-  
-  ${props =>
-    props.open &&
+
+    
+  ${props =>                     // props를 전달하는 구문이다. props는 닫혀있는데 전달되면 open으로 변경되고 open일 때의 css를 정의한다. 
+    props.open &&                
     css`
       background: #ff6b6b;
       &:hover {
@@ -77,6 +82,9 @@ const Input = styled.input`
 `;
 
 function TodoCreate() {
+
+  /* useState가 true 이면 + 아이콘을 돌려서 x 표시를 보여주고 버튼을 빨간색으로 변경
+  false 라면 원상태로 복구한다. */
   const [open, setOpen] = useState(false);
 
   const onToggle = () => setOpen(!open);
