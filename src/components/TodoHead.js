@@ -1,7 +1,6 @@
-/* 맨 위에 위치하여 날짜, 요일, 할 일 개수를 보여주는 컴포넌트 */ 
-
 import React from 'react';
 import styled from 'styled-components';
+import { useTodoState } from '../TodoContext';
 
 const TodoHeadBlock = styled.div`
   padding-top: 48px;
@@ -15,10 +14,9 @@ const TodoHeadBlock = styled.div`
     color: #343a40;
   }
   .day {
-    margin-top: 10px;
+    margin-top: 4px;
     color: #868e96;
     font-size: 21px;
-    font-weight: bold;
   }
   .tasks-left {
     color: #20c997;
@@ -28,13 +26,23 @@ const TodoHeadBlock = styled.div`
   }
 `;
 
-/* CSS collector 사용하여 TodoHead function 선언 */
 function TodoHead() {
+  const todos = useTodoState();
+  const undoneTasks = todos.filter(todo => !todo.done);
+
+  const today = new Date();
+  const dateString = today.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  const dayName = today.toLocaleDateString('ko-KR', { weekday: 'long' });
+
   return (
     <TodoHeadBlock>
-      <h1>2021년 6월 24일</h1>
-      <div className="day">목요일</div>
-      <div className="tasks-left">할 일 남음</div>
+      <h1>{dateString}</h1>
+      <div className="day">{dayName}</div>
+      <div className="tasks-left">할 일 {undoneTasks.length}개 남음</div>
     </TodoHeadBlock>
   );
 }

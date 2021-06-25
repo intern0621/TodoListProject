@@ -1,45 +1,40 @@
-/* 리듀서 사용하여 상태를 관리하는 컴포넌트 생성 
-   리듀서 함수란 현재 상태와 액션 객체를 파라미터로 받아와서 새로운 상태를 반환해주는 함수
-   initial state 내부의 항목들을 todo라고 지정 */
-
 import React, { useReducer, createContext, useContext, useRef } from 'react';
 
 const initialTodos = [
   {
-    id : 1,
-    text : '프로젝트 생성하기',
-    done : true
+    id: 1,
+    text: '프로젝트 생성하기',
+    done: true
   },
   {
-    id : 2,
-    text : '컴포넌트 스타일링하기',
-    done : true
+    id: 2,
+    text: '컴포넌트 스타일링하기',
+    done: true
   },
   {
-    id : 3,
-    text : 'context 만들기',
-    done : true
+    id: 3,
+    text: 'Context 만들기',
+    done: false
   },
   {
-    id : 4,
-    text : '기능 구현하기',
-    done : true
-  },
+    id: 4,
+    text: '기능 구현하기',
+    done: false
+  }
 ];
-
 
 function todoReducer(state, action) {
   switch (action.type) {
     case 'CREATE':
       return state.concat(action.todo);
     case 'TOGGLE':
-      return state.map(todo => 
-        todo.id === action.id ? {...todo, done: !todo.done} : todo
-        );
+      return state.map(todo =>
+        todo.id === action.id ? { ...todo, done: !todo.done } : todo
+      );
     case 'REMOVE':
-      return state.filter(todo => todo.it !== action.id);
+      return state.filter(todo => todo.id !== action.id);
     default:
-      throw new Error('Unhandled action type: ${action.type}');
+      throw new Error(`Unhandled action type: ${action.type}`);
   }
 }
 
@@ -63,13 +58,25 @@ export function TodoProvider({ children }) {
 }
 
 export function useTodoState() {
-  return useContext(TodoStateContext);
+  const context = useContext(TodoStateContext);
+  if (!context) {
+    throw new Error('Cannot find TodoProvider');
+  }
+  return context;
 }
 
 export function useTodoDispatch() {
-  return useContext(TodoDispatchContext);
+  const context = useContext(TodoDispatchContext);
+  if (!context) {
+    throw new Error('Cannot find TodoProvider');
+  }
+  return context;
 }
 
 export function useTodoNextId() {
-  return useContext(TodoNextIdContext);
-} 
+  const context = useContext(TodoNextIdContext);
+  if (!context) {
+    throw new Error('Cannot find TodoProvider');
+  }
+  return context;
+}

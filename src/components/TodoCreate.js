@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
+import { useTodoDispatch, useTodoNextId, useTodoNextID } from '../TodoContext';
 
 /* z-index : 아이콘들이 겹쳐 있을 때 제일 먼저 올 우선순위 결정 
    */
@@ -86,15 +87,40 @@ function TodoCreate() {
   /* useState가 true 이면 + 아이콘을 돌려서 x 표시를 보여주고 버튼을 빨간색으로 변경
   false 라면 원상태로 복구한다. */
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('');
+
+  const dispatch = useTodoDispatch();
+  const nextId = useTodoNextId();
 
   const onToggle = () => setOpen(!open);
+  const onChange = e => setValue(e.target.value);
+  const onSubmit = e => {
+    e.preventDefault();
+    dispatch({
+      type: 'CREATE',
+      todo: {
+        id: nextId.current,
+        text: value,
+        done: false
+      }
+    });
+    setValue('');
+    setOpen(false);
+    nextId.current += 1;
+  };
+  
 
   return (
     <>
       {open && (
         <InsertFormPositioner>
-          <InsertForm>
-            <Input autoFocus placeholder="할 일을 입력 후, Enter 를 누르세요" />
+          <InsertForm onSubmit={onSubmit}>
+            <Input
+              autoFocus
+              placeholder="할 일을 입력 후, Enter 를 누르세요"
+              onChange={onChange}
+              value={value}
+            />
           </InsertForm>
         </InsertFormPositioner>
       )}
